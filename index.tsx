@@ -1,11 +1,17 @@
 import React from 'react';
 import { render } from 'react-dom';
-import { createStore } from 'redux';
+import { createStore, applyMiddleware } from 'redux';
+import { createEpicMiddleware } from 'redux-observable';
+import logger from 'redux-logger';
 import { Provider } from 'react-redux';
-import rootReducer from './src/store';
+import { rootReducer, rootEpic } from './src/store';
 import App from './src/app';
 
-const store = createStore(rootReducer);
+const epicMiddleware = createEpicMiddleware();
+
+const store = createStore(rootReducer, applyMiddleware(epicMiddleware, logger));
+
+epicMiddleware.run(rootEpic);
 
 const rootEl: HTMLElement = document.getElementById('app')!; // don't worry ts ^^@
 

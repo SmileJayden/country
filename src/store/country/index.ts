@@ -3,19 +3,19 @@ const FETCH_COUNTRIES = 'FETCH_COUNTIES';
 const SORT_COUNTRIES = 'SORT_COUNTRIES';
 const REMOVE_COUNTRY = 'REMOVE_COUNTRY';
 
-interface FetchCountries {
+export interface FetchCountries {
   type: typeof FETCH_COUNTRIES;
   payload: {};
 }
 
-interface SortCountries {
+export interface SortCountries {
   type: typeof SORT_COUNTRIES;
   payload: {
     sortBy: string;
   };
 }
 
-interface RemoveCountry {
+export interface RemoveCountry {
   type: typeof REMOVE_COUNTRY;
   payload: {
     countryId: number;
@@ -42,6 +42,7 @@ export const removeCountry = (countryId: number): RemoveCountry => ({
 
 // state interface
 export interface CountryState {
+  loading: boolean;
   countries: CountryType[];
 }
 
@@ -55,6 +56,7 @@ interface CountryType {
 
 // init state
 const initState: CountryState = {
+  loading: false,
   countries: [
     {
       name: 'Afghanistan',

@@ -1,10 +1,12 @@
 import { combineReducers } from 'redux';
+import { combineEpics } from 'redux-observable';
 import countryReducer from './country';
+import countryEpic from './country/epic';
 
-const rootReducer = combineReducers({
+export const rootReducer = combineReducers({
   country: countryReducer,
 });
 
-export default rootReducer;
+export const rootEpic = combineEpics([countryEpic]);
 
 export type RootState = ReturnType<typeof rootReducer>;
