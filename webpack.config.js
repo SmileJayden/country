@@ -5,7 +5,7 @@ const mode = process.env.NODE_ENV || 'development';
 
 module.exports = {
   mode,
-  entry: path.join(__dirname, 'index.ts'),
+  entry: path.join(__dirname, 'index.tsx'),
   output: {
     path: path.resolve(__dirname, 'public'),
     filename: 'bundle.js',
