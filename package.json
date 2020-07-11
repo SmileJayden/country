@@ -9,6 +9,7 @@
     "dev": "webpack-dev-server"
   },
   "dependencies": {
+    "@hookform/resolvers": "^0.0.6",
     "axios": "^0.19.2",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
@@ -18,7 +19,8 @@
     "redux-logger": "^3.0.6",
     "redux-observable": "^1.2.0",
     "rxjs": "^6.6.0",
-    "styled-components": "^5.1.1"
+    "styled-components": "^5.1.1",
+    "yup": "^0.29.1"
   },
   "devDependencies": {
     "@babel/core": "^7.10.4",
@@ -29,6 +31,7 @@
     "@types/react-redux": "^7.1.9",
     "@types/redux-logger": "^3.0.8",
     "@types/styled-components": "^5.1.1",
+    "@types/yup": "^0.29.3",
     "babel-loader": "^8.1.0",
     "html-webpack-plugin": "^4.3.0",
     "prettier": "^2.0.5",
