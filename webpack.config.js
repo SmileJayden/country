@@ -35,7 +35,7 @@ module.exports = {
       '~': path.resolve(__dirname, 'src'),
     },
   },
-  devtool: 'inline-source-map',
+  devtool: 'eval-source-map',
   plugins: [
     new HTMLplugin({
       template: './index.html',
