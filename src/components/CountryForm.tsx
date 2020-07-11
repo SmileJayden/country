@@ -65,7 +65,7 @@ const schema = yup.object().shape({
     .typeError('숫자를 입력 하시오')
     .positive('0보다 큰 수를 입력 하시오')
     .integer('정수를 입력 하시오')
-    .required('국가 번호를 입력 하시오'), // never comes here... disappointed yup
+    .required('국가 번호를 입력 하시오'), // never comes here...
   capital: yup.string().required('수도를 입력 하시오'),
   region: yup.string().required('대륙을 입력 하시오'),
 });
