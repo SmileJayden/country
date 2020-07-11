@@ -1,7 +1,9 @@
 import React from 'react';
 import { RootState } from './store';
+import {} from 'styled-components/cssprop';
 import { useDispatch, useSelector } from 'react-redux';
 import { CountryType, INIT_FETCH_COUNTRIES } from '~/store/country';
+import CountryForm from '~/components/CountryForm';
 
 const App = () => {
   const countries: CountryType[] = useSelector(
@@ -18,6 +20,7 @@ const App = () => {
 
   return (
     <>
+      <CountryForm />
       <h2>"Hello Countries ^^@"</h2>
       <div>
         <h2>{loading ? 'loading true' : 'loading false'}</h2>
