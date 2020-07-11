@@ -1,10 +1,22 @@
 // action types
-const FETCH_COUNTRIES = 'FETCH_COUNTIES';
-const SORT_COUNTRIES = 'SORT_COUNTRIES';
-const REMOVE_COUNTRY = 'REMOVE_COUNTRY';
+export const INIT_FETCH_COUNTRIES = 'INIT_FETCH_COUNTRIES';
+export const SUCCESS_FETCH_COUNTRIES = 'SUCCESS_FETCH_COUNTRIES';
+export const FAIL_FETCH_COUNTRIES = 'FAIL_FETCH_COUNTRIES';
+export const SORT_COUNTRIES = 'SORT_COUNTRIES';
+export const REMOVE_COUNTRY = 'REMOVE_COUNTRY';
 
-export interface FetchCountries {
-  type: typeof FETCH_COUNTRIES;
+export interface InitFetchCountries {
+  type: typeof INIT_FETCH_COUNTRIES;
+  payload: {};
+}
+
+export interface SuccessFetchCountries {
+  type: typeof SUCCESS_FETCH_COUNTRIES;
+  payload: {};
+}
+
+export interface FailFetchCountries {
+  type: typeof FAIL_FETCH_COUNTRIES;
   payload: {};
 }
 
@@ -22,11 +34,26 @@ export interface RemoveCountry {
   };
 }
 
-export type CountryActionTypes = FetchCountries | SortCountries | RemoveCountry;
+export type CountryActionTypes =
+  | InitFetchCountries
+  | SuccessFetchCountries
+  | FailFetchCountries
+  | SortCountries
+  | RemoveCountry;
 
 // action functions
-export const fetchCountries = (): FetchCountries => ({
-  type: FETCH_COUNTRIES,
+export const initFetchCountries = (): InitFetchCountries => ({
+  type: INIT_FETCH_COUNTRIES,
+  payload: {},
+});
+
+export const successFetchCountries = (): SuccessFetchCountries => ({
+  type: SUCCESS_FETCH_COUNTRIES,
+  payload: {},
+});
+
+export const failFetchCountries = (): FailFetchCountries => ({
+  type: FAIL_FETCH_COUNTRIES,
   payload: {},
 });
 
@@ -81,11 +108,20 @@ const countryReducer = (
   action: CountryActionTypes
 ): CountryState => {
   switch (action.type) {
-    case FETCH_COUNTRIES:
+    case INIT_FETCH_COUNTRIES:
+      console.log('INIT_FETCH_COUNTRIES action is come');
+      return state;
+    case SUCCESS_FETCH_COUNTRIES:
+      console.log('SUCCESS_FETCH_COUNTRIES action is come');
+      return state;
+    case FAIL_FETCH_COUNTRIES:
+      console.log('FAIL_FETCH_COUNTRIES action is come');
       return state;
     case SORT_COUNTRIES:
+      console.log('SORT_COUNTRIES action is come');
       return state;
     case REMOVE_COUNTRY:
+      console.log('REMOVE_COUNTRY action is come');
       return state;
     default:
       return state;

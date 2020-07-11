@@ -4,8 +4,8 @@ import { createStore, applyMiddleware } from 'redux';
 import { createEpicMiddleware } from 'redux-observable';
 import logger from 'redux-logger';
 import { Provider } from 'react-redux';
-import { rootReducer, rootEpic } from './src/store';
-import App from './src/app';
+import { rootReducer, rootEpic } from '~/store';
+import App from '~/app';
 
 const epicMiddleware = createEpicMiddleware();
 
