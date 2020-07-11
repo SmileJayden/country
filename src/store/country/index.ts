@@ -12,7 +12,9 @@ export interface InitFetchCountries {
 
 export interface SuccessFetchCountries {
   type: typeof SUCCESS_FETCH_COUNTRIES;
-  payload: {};
+  payload: {
+    countries: CountryType[];
+  };
 }
 
 export interface FailFetchCountries {
@@ -47,9 +49,11 @@ export const initFetchCountries = (): InitFetchCountries => ({
   payload: {},
 });
 
-export const successFetchCountries = (): SuccessFetchCountries => ({
+export const successFetchCountries = (
+  countries: CountryType[]
+): SuccessFetchCountries => ({
   type: SUCCESS_FETCH_COUNTRIES,
-  payload: {},
+  payload: { countries },
 });
 
 export const failFetchCountries = (): FailFetchCountries => ({
@@ -73,7 +77,7 @@ export interface CountryState {
   countries: CountryType[];
 }
 
-interface CountryType {
+export interface CountryType {
   name: string;
   alpha2Code: string;
   callingCodes: string[];
@@ -84,22 +88,7 @@ interface CountryType {
 // init state
 const initState: CountryState = {
   loading: false,
-  countries: [
-    {
-      name: 'Afghanistan',
-      alpha2Code: 'AF',
-      callingCodes: ['93'],
-      capital: 'Kabul',
-      region: 'Asia',
-    },
-    {
-      name: 'Åland Islands',
-      alpha2Code: 'AX',
-      callingCodes: ['358'],
-      capital: 'Mariehamn',
-      region: 'Europe',
-    },
-  ],
+  countries: [],
 };
 
 // reducer
@@ -110,13 +99,16 @@ const countryReducer = (
   switch (action.type) {
     case INIT_FETCH_COUNTRIES:
       console.log('INIT_FETCH_COUNTRIES action is come');
-      return state;
+      return { ...state, loading: true };
     case SUCCESS_FETCH_COUNTRIES:
-      console.log('SUCCESS_FETCH_COUNTRIES action is come');
-      return state;
+      console.log(
+        'SUCCESS_FETCH_COUNTRIES action is come',
+        action.payload.countries
+      );
+      return { loading: false, countries: action.payload.countries };
     case FAIL_FETCH_COUNTRIES:
       console.log('FAIL_FETCH_COUNTRIES action is come');
-      return state;
+      return { loading: false, countries: [] };
     case SORT_COUNTRIES:
       console.log('SORT_COUNTRIES action is come');
       return state;
