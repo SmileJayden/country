@@ -4,12 +4,6 @@ import styled from 'styled-components';
 import { yupResolver } from '@hookform/resolvers';
 import * as yup from 'yup';
 
-yup.setLocale({
-  number: {
-    min: 'Deve ser maior que ${min}',
-  },
-});
-
 const FormWrapper = styled.form`
   width: 300px;
   background-color: antiquewhite;
