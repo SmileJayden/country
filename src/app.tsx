@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {} from 'styled-components/cssprop';
 import styled from 'styled-components';
 import { RootState } from '~/store';
-import { INIT_FETCH_COUNTRIES, initFetchCountries } from '~/store/country';
+import { initFetchCountries } from '~/store/country';
 import CountryTable from '~/components/CountryTable';
 import CountryForm from '~/components/CountryForm';
 

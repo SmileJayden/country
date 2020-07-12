@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   CountryType,
+  failFetchCountries,
   flipCountries,
   removeCountry,
   SortBy,
   sortCountries,
+  updateLoadCount,
 } from '~/store/country';
 
 import { RootState } from '~/store';
@@ -105,23 +107,19 @@ const TableWrapper = styled.div`
     }
 
     .fade-enter {
-      max-height: 0;
       opacity: 0;
     }
 
     .fade-enter-active {
-      max-height: 30px;
       opacity: 1;
       transition: all 500ms;
     }
 
     .fade-exit {
-      max-height: 30px;
       opacity: 1;
     }
 
     .fade-exit-active {
-      max-height: 0;
       opacity: 0;
       transition: all 500ms;
     }
@@ -129,6 +127,34 @@ const TableWrapper = styled.div`
 `;
 
 const CountryTable = () => {
+  useEffect(() => {
+    const sentinel: HTMLElement = document.getElementById('sentinel')!;
+    const scrollWrapper: HTMLElement = document.getElementById(
+      'scroll-wrapper'
+    )!;
+    const ioCallback = (
+      entries: IntersectionObserverEntry[],
+      observer: IntersectionObserver
+    ) => {
+      entries.forEach((entry: IntersectionObserverEntry) => {
+        if (entry.isIntersecting) dispatch(updateLoadCount());
+      });
+    };
+    const ioOption: IntersectionObserverInit = {
+      root: scrollWrapper,
+      rootMargin: '0px 0px 600px 0px',
+    };
+
+    const io: IntersectionObserver = new IntersectionObserver(
+      ioCallback,
+      ioOption
+    );
+
+    io.observe(sentinel);
+    return () => {
+      io.disconnect();
+    };
+  }, []);
   const countries: CountryType[] = useSelector(
     (state: RootState) => state.country.countries
   );
@@ -140,6 +166,9 @@ const CountryTable = () => {
   );
   const loading: boolean = useSelector(
     (state: RootState) => state.country.loading
+  );
+  const loadCount: number = useSelector(
+    (state: RootState) => state.country.loadCount
   );
   const dispatch = useDispatch();
   const handleBtnOnClick = (uuid: string) => {
@@ -195,12 +224,12 @@ const CountryTable = () => {
         </div>
       </div>
 
-      <div className="tbody">
+      <div className="tbody" id="scroll-wrapper">
         {loading ? (
           <div>로딩 중 ^^@</div>
         ) : (
           <TransitionGroup component={null}>
-            {countries.map((country, i) => (
+            {countries.slice(0, loadCount).map((country, i) => (
               <CSSTransition
                 timeout={500}
                 classNames="fade"
@@ -222,6 +251,7 @@ const CountryTable = () => {
             ))}
           </TransitionGroup>
         )}
+        <p id="sentinel" />
       </div>
     </TableWrapper>
   );

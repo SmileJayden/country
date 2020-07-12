@@ -1,6 +1,5 @@
 import { v4 as uuid } from 'uuid';
 import sortBy from 'lodash/sortBy';
-import reverse from 'lodash/reverse';
 
 // action types
 export const INIT_FETCH_COUNTRIES = 'INIT_FETCH_COUNTRIES';
@@ -10,6 +9,9 @@ export const SORT_COUNTRIES = 'SORT_COUNTRIES';
 export const FLIP_COUNTRIES = 'FLIP_COUNTRIES';
 export const ADD_COUNTRY = 'ADD_COUNTRY';
 export const REMOVE_COUNTRY = 'REMOVE_COUNTRY';
+export const UPDATE_LOAD_COUNT = 'UPDATE_LOAD_COUNT';
+
+const DEFAULT_LOAD_COUNT: number = 30;
 
 export interface CountryFormType {
   name: string;
@@ -78,6 +80,11 @@ export interface RemoveCountry {
   };
 }
 
+export interface UpdateLoadCount {
+  type: typeof UPDATE_LOAD_COUNT;
+  payload: {};
+}
+
 export type CountryActionTypes =
   | InitFetchCountries
   | SuccessFetchCountries
@@ -85,7 +92,8 @@ export type CountryActionTypes =
   | SortCountries
   | FlipCountries
   | AddCountry
-  | RemoveCountry;
+  | RemoveCountry
+  | UpdateLoadCount;
 
 // action functions
 export const initFetchCountries = (): InitFetchCountries => ({
@@ -125,12 +133,18 @@ export const removeCountry = (countryUuid: string): RemoveCountry => ({
   payload: { countryUuid },
 });
 
+export const updateLoadCount = (): UpdateLoadCount => ({
+  type: UPDATE_LOAD_COUNT,
+  payload: {},
+});
+
 // state interface
 export interface CountryState {
   loading: boolean;
   countries: CountryType[];
   sortBy: undefined | SortBy;
   sortDirection: boolean;
+  loadCount: number;
 }
 
 export interface CountryType {
@@ -148,6 +162,7 @@ const initState: CountryState = {
   countries: [],
   sortBy: undefined,
   sortDirection: true,
+  loadCount: DEFAULT_LOAD_COUNT,
 };
 
 // reducer
@@ -160,10 +175,6 @@ const countryReducer = (
       console.log('INIT_FETCH_COUNTRIES action is come');
       return { ...state, loading: true };
     case SUCCESS_FETCH_COUNTRIES:
-      console.log(
-        'SUCCESS_FETCH_COUNTRIES action is come',
-        action.payload.countries
-      );
       return { ...state, loading: false, countries: action.payload.countries };
     case FAIL_FETCH_COUNTRIES:
       console.log('FAIL_FETCH_COUNTRIES action is come');
@@ -174,12 +185,14 @@ const countryReducer = (
         countries: sortBy(state.countries, action.payload.sortBy),
         sortBy: action.payload.sortBy,
         sortDirection: true,
+        loadCount: DEFAULT_LOAD_COUNT,
       };
     case FLIP_COUNTRIES:
       return {
         ...state,
         countries: [...state.countries].reverse(),
         sortDirection: !state.sortDirection,
+        loadCount: DEFAULT_LOAD_COUNT,
       };
     case 'ADD_COUNTRY':
       const addedCountry: CountryType = {
@@ -192,6 +205,11 @@ const countryReducer = (
       return {
         ...state,
         countries: state.countries.filter((ctr) => ctr.uuid !== targetUuid),
+      };
+    case 'UPDATE_LOAD_COUNT':
+      return {
+        ...state,
+        loadCount: state.loadCount + DEFAULT_LOAD_COUNT,
       };
     default:
       return state;
