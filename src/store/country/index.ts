@@ -1,11 +1,13 @@
 import { v4 as uuid } from 'uuid';
 import sortBy from 'lodash/sortBy';
+import reverse from 'lodash/reverse';
 
 // action types
 export const INIT_FETCH_COUNTRIES = 'INIT_FETCH_COUNTRIES';
 export const SUCCESS_FETCH_COUNTRIES = 'SUCCESS_FETCH_COUNTRIES';
 export const FAIL_FETCH_COUNTRIES = 'FAIL_FETCH_COUNTRIES';
 export const SORT_COUNTRIES = 'SORT_COUNTRIES';
+export const FLIP_COUNTRIES = 'FLIP_COUNTRIES';
 export const ADD_COUNTRY = 'ADD_COUNTRY';
 export const REMOVE_COUNTRY = 'REMOVE_COUNTRY';
 
@@ -57,6 +59,11 @@ export interface SortCountries {
   };
 }
 
+export interface FlipCountries {
+  type: typeof FLIP_COUNTRIES;
+  payload: {};
+}
+
 export interface AddCountry {
   type: typeof ADD_COUNTRY;
   payload: {
@@ -76,6 +83,7 @@ export type CountryActionTypes =
   | SuccessFetchCountries
   | FailFetchCountries
   | SortCountries
+  | FlipCountries
   | AddCountry
   | RemoveCountry;
 
@@ -102,6 +110,11 @@ export const sortCountries = (sortBy: SortBy): SortCountries => ({
   payload: { sortBy },
 });
 
+export const flipCountries = () => ({
+  type: FLIP_COUNTRIES,
+  payload: {},
+});
+
 export const addCountry = (countryFormData: CountryFormType): AddCountry => ({
   type: ADD_COUNTRY,
   payload: { country: countryFormData },
@@ -116,6 +129,8 @@ export const removeCountry = (countryUuid: string): RemoveCountry => ({
 export interface CountryState {
   loading: boolean;
   countries: CountryType[];
+  sortBy: undefined | SortBy;
+  sortDirection: boolean;
 }
 
 export interface CountryType {
@@ -131,6 +146,8 @@ export interface CountryType {
 const initState: CountryState = {
   loading: false,
   countries: [],
+  sortBy: undefined,
+  sortDirection: true,
 };
 
 // reducer
@@ -147,14 +164,22 @@ const countryReducer = (
         'SUCCESS_FETCH_COUNTRIES action is come',
         action.payload.countries
       );
-      return { loading: false, countries: action.payload.countries };
+      return { ...state, loading: false, countries: action.payload.countries };
     case FAIL_FETCH_COUNTRIES:
       console.log('FAIL_FETCH_COUNTRIES action is come');
-      return { loading: false, countries: [] };
+      return { ...state, loading: false, countries: [] };
     case SORT_COUNTRIES:
       return {
         ...state,
         countries: sortBy(state.countries, action.payload.sortBy),
+        sortBy: action.payload.sortBy,
+        sortDirection: true,
+      };
+    case FLIP_COUNTRIES:
+      return {
+        ...state,
+        countries: [...state.countries].reverse(),
+        sortDirection: !state.sortDirection,
       };
     case 'ADD_COUNTRY':
       const addedCountry: CountryType = {

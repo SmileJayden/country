@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   CountryType,
+  flipCountries,
   removeCountry,
   SortBy,
   sortCountries,
@@ -42,6 +43,36 @@ const TableWrapper = styled.div`
     }
     .extra {
       width: 10%;
+    }
+    .th:not(.extra) {
+      cursor: pointer;
+      &:hover {
+        background-color: burlywood;
+        color: beige;
+      }
+
+      &.asc::after {
+        content: ' ';
+        height: 0;
+        border-top: 10px solid;
+        border-left: 5px solid rgba(0, 0, 0, 0);
+        border-right: 5px solid rgba(0, 0, 0, 0);
+        color: chocolate;
+        top: 18px;
+        left: 10px;
+        position: relative;
+      }
+      &.desc::after {
+        content: ' ';
+        height: 0;
+        border-bottom: 10px solid;
+        border-left: 5px solid rgba(0, 0, 0, 0);
+        border-right: 5px solid rgba(0, 0, 0, 0);
+        color: chocolate;
+        bottom: 16px;
+        left: 10px;
+        position: relative;
+      }
     }
     .td {
       overflow: hidden;
@@ -98,6 +129,12 @@ const CountryTable = () => {
   const countries: CountryType[] = useSelector(
     (state: RootState) => state.country.countries
   );
+  const currSortBy: SortBy | undefined = useSelector(
+    (state: RootState) => state.country.sortBy
+  );
+  const sortDirection: boolean = useSelector(
+    (state: RootState) => state.country.sortDirection
+  );
   const loading: boolean = useSelector(
     (state: RootState) => state.country.loading
   );
@@ -106,7 +143,15 @@ const CountryTable = () => {
     dispatch(removeCountry(uuid));
   };
   const handleSortOnClick = (sortBy: SortBy) => {
-    dispatch(sortCountries(sortBy));
+    if (sortBy === currSortBy) dispatch(flipCountries());
+    else dispatch(sortCountries(sortBy));
+  };
+  const sortDirector = (colName: SortBy): string => {
+    if (colName === currSortBy) {
+      if (sortDirection) return 'asc';
+      return 'desc';
+    }
+    return '';
   };
 
   return (
@@ -114,31 +159,31 @@ const CountryTable = () => {
       <div className="thead">
         <div className="tr">
           <div
-            className="th name"
+            className={'th name ' + sortDirector(SortBy.name)}
             onClick={() => handleSortOnClick(SortBy.name)}
           >
             이름
           </div>
           <div
-            className="th code"
+            className={'th code ' + sortDirector(SortBy.alpha2Code)}
             onClick={() => handleSortOnClick(SortBy.alpha2Code)}
           >
             코드
           </div>
           <div
-            className="th id"
+            className={'th id ' + sortDirector(SortBy.callingCodes)}
             onClick={() => handleSortOnClick(SortBy.callingCodes)}
           >
             ID
           </div>
           <div
-            className="th capital"
+            className={'th capital ' + sortDirector(SortBy.capital)}
             onClick={() => handleSortOnClick(SortBy.capital)}
           >
             수도
           </div>
           <div
-            className="th region"
+            className={'th region ' + sortDirector(SortBy.region)}
             onClick={() => handleSortOnClick(SortBy.region)}
           >
             대륙
