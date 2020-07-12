@@ -11,6 +11,8 @@
   "dependencies": {
     "@hookform/resolvers": "^0.0.6",
     "axios": "^0.19.2",
+    "css-loader": "^3.6.0",
+    "file-loader": "^6.0.0",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
     "react-hook-form": "^6.0.4",
@@ -19,6 +21,7 @@
     "redux-logger": "^3.0.6",
     "redux-observable": "^1.2.0",
     "rxjs": "^6.6.0",
+    "style-loader": "^1.2.1",
     "styled-components": "^5.1.1",
     "yup": "^0.29.1"
   },

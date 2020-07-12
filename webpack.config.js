@@ -27,6 +27,14 @@ module.exports = {
         },
         exclude: /node_module/,
       },
+      {
+        test: /\.css$/,
+        loader: 'style-loader!css-loader',
+      },
+      {
+        test: /\.(woff|woff2|ttf|eot)$/,
+        use: 'file-loader?name=fonts/[name].[ext]!static',
+      },
     ],
   },
   resolve: {

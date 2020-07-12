@@ -16,22 +16,23 @@ const FormWrapper = styled.form`
     display: flex;
     flex-direction: column;
     position: relative;
-    height: 130px;
+    height: 120px;
 
     span {
       font-size: 18px;
       font-weight: bold;
+      margin-bottom: 10px;
     }
 
     input,
     select {
-      padding: 20px;
+      padding: 12px;
     }
 
     p {
       position: absolute;
       color: red;
-      top: 75px;
+      top: 78px;
     }
   }
 
