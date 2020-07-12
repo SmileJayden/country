@@ -87,7 +87,7 @@ const CountryTable = () => {
           <div className="tr" key={`table-row-${i}`}>
             <div className="td name">{country.name}</div>
             <div className="td code">{country.alpha2Code}</div>
-            <div className="td id">{country.callingCodes}</div>
+            <div className="td id">{country.callingCodes[0]}</div>
             <div className="td capital">{country.capital}</div>
             <div className="td region">{country.region}</div>
             <div className="td extra">

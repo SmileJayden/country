@@ -93,7 +93,7 @@ const CountryForm = () => {
         <p>{errors.alpha2Code?.message}</p>
       </label>
       <label htmlFor="form-calling-codes">
-        <span>국가 번호</span>
+        <span>국가 ID</span>
         <input
           id="form-calling-codes"
           type="text"
