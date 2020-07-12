@@ -97,8 +97,11 @@ const TableWrapper = styled.div`
     flex-direction: column;
     height: calc(100vh - 200px);
     overflow-y: auto;
-    .tr:hover {
-      background-color: cornsilk;
+    .tr {
+      flex: 1 0 auto; // for safari
+      &:hover {
+        background-color: cornsilk;
+      }
     }
 
     .fade-enter {

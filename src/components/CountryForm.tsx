@@ -29,6 +29,11 @@ const FormWrapper = styled.form`
     input,
     select {
       padding: 12px;
+      line-height: 16px;
+    }
+
+    select {
+      -webkit-appearance: none; // for safari
     }
 
     p {
