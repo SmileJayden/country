@@ -1,4 +1,5 @@
 import { v4 as uuid } from 'uuid';
+import sortBy from 'lodash/sortBy';
 
 // action types
 export const INIT_FETCH_COUNTRIES = 'INIT_FETCH_COUNTRIES';
@@ -14,6 +15,14 @@ export interface CountryFormType {
   callingCodes: string;
   capital: string;
   region: RegionEnum;
+}
+
+export enum SortBy {
+  name = 'name',
+  alpha2Code = 'alpha2Code',
+  callingCodes = 'callingCodes',
+  capital = 'capital',
+  region = 'region',
 }
 
 enum RegionEnum {
@@ -44,7 +53,7 @@ export interface FailFetchCountries {
 export interface SortCountries {
   type: typeof SORT_COUNTRIES;
   payload: {
-    sortBy: string;
+    sortBy: SortBy;
   };
 }
 
@@ -88,7 +97,7 @@ export const failFetchCountries = (): FailFetchCountries => ({
   payload: {},
 });
 
-export const sortCountries = (sortBy: string): SortCountries => ({
+export const sortCountries = (sortBy: SortBy): SortCountries => ({
   type: SORT_COUNTRIES,
   payload: { sortBy },
 });
@@ -113,7 +122,7 @@ export interface CountryType {
   uuid: string;
   name: string;
   alpha2Code: string;
-  callingCodes: string[];
+  callingCodes: string;
   capital: string;
   region: string;
 }
@@ -143,12 +152,13 @@ const countryReducer = (
       console.log('FAIL_FETCH_COUNTRIES action is come');
       return { loading: false, countries: [] };
     case SORT_COUNTRIES:
-      console.log('SORT_COUNTRIES action is come');
-      return state;
+      return {
+        ...state,
+        countries: sortBy(state.countries, action.payload.sortBy),
+      };
     case 'ADD_COUNTRY':
       const addedCountry: CountryType = {
         ...action.payload.country,
-        callingCodes: [action.payload.country.callingCodes],
         uuid: uuid(),
       };
       return { ...state, countries: [addedCountry].concat(state.countries) };

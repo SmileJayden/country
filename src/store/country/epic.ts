@@ -23,7 +23,11 @@ const fetchCountriesEpic = (action$: ActionsObservable<Action>) => {
         const res: CountryType[] = await axios
           .get(URL)
           .then((res: AxiosResponse) =>
-            res.data.map((ctr: CountryType) => ({ ...ctr, uuid: uuid() }))
+            res.data.map((ctr: CountryType) => ({
+              ...ctr,
+              uuid: uuid(),
+              callingCodes: ctr.callingCodes[0],
+            }))
           );
         return { type: SUCCESS_FETCH_COUNTRIES, payload: { countries: res } };
       }

@@ -2,8 +2,12 @@ import React from 'react';
 import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
-import uuid from 'uuid';
-import { CountryType, REMOVE_COUNTRY, removeCountry } from '~/store/country';
+import {
+  CountryType,
+  removeCountry,
+  SortBy,
+  sortCountries,
+} from '~/store/country';
 
 import { RootState } from '~/store';
 
@@ -101,16 +105,44 @@ const CountryTable = () => {
   const handleBtnOnClick = (uuid: string) => {
     dispatch(removeCountry(uuid));
   };
+  const handleSortOnClick = (sortBy: SortBy) => {
+    dispatch(sortCountries(sortBy));
+  };
 
   return (
     <TableWrapper className="table">
       <div className="thead">
         <div className="tr">
-          <div className="th name">이름</div>
-          <div className="th code">코드</div>
-          <div className="th id">ID</div>
-          <div className="th capital">수도</div>
-          <div className="th region">대륙</div>
+          <div
+            className="th name"
+            onClick={() => handleSortOnClick(SortBy.name)}
+          >
+            이름
+          </div>
+          <div
+            className="th code"
+            onClick={() => handleSortOnClick(SortBy.alpha2Code)}
+          >
+            코드
+          </div>
+          <div
+            className="th id"
+            onClick={() => handleSortOnClick(SortBy.callingCodes)}
+          >
+            ID
+          </div>
+          <div
+            className="th capital"
+            onClick={() => handleSortOnClick(SortBy.capital)}
+          >
+            수도
+          </div>
+          <div
+            className="th region"
+            onClick={() => handleSortOnClick(SortBy.region)}
+          >
+            대륙
+          </div>
           <div className="th extra" />
         </div>
       </div>
@@ -129,7 +161,7 @@ const CountryTable = () => {
                 <div className="tr">
                   <div className="td name">{country.name}</div>
                   <div className="td code">{country.alpha2Code}</div>
-                  <div className="td id">{country.callingCodes[0]}</div>
+                  <div className="td id">{country.callingCodes}</div>
                   <div className="td capital">{country.capital}</div>
                   <div className="td region">{country.region}</div>
                   <div className="td extra">
