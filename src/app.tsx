@@ -7,15 +7,16 @@ import { RootState } from '~/store';
 import { initFetchCountries } from '~/store/country';
 import CountryTable from '~/components/CountryTable';
 import CountryForm from '~/components/CountryForm';
+import CountrySearchEngine from '~/components/CountrySearchEngine';
 
 const AppWrapper = styled.div`
   display: flex;
+  .engine-table-wrapper {
+    padding: 10px;
+  }
 `;
 
 const App = () => {
-  const loading: boolean = useSelector(
-    (state: RootState) => state.country.loading
-  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -26,10 +27,8 @@ const App = () => {
     <>
       <AppWrapper>
         <CountryForm />
-        <div>
-          <h2>"Hello Countries ^^@"</h2>
-          <h2>{loading ? 'loading true' : 'loading false'}</h2>
-          <h1>Awesome Countries!!</h1>
+        <div className={'engine-table-wrapper'}>
+          <CountrySearchEngine />
           <CountryTable />
         </div>
       </AppWrapper>

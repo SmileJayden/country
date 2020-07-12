@@ -4,7 +4,6 @@ import styled from 'styled-components';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   CountryType,
-  failFetchCountries,
   flipCountries,
   removeCountry,
   SortBy,
@@ -16,7 +15,6 @@ import { RootState } from '~/store';
 
 const TableWrapper = styled.div`
   &.table {
-    margin: 30px;
     border: 1px solid darkgoldenrod;
   }
 
@@ -100,7 +98,7 @@ const TableWrapper = styled.div`
     height: calc(100vh - 200px);
     overflow-y: auto;
     .tr {
-      flex: 1 0 auto; // for safari
+      flex: 0 0 50px;
       &:hover {
         background-color: cornsilk;
       }
@@ -170,6 +168,9 @@ const CountryTable = () => {
   const loadCount: number = useSelector(
     (state: RootState) => state.country.loadCount
   );
+  const searchValue: string = useSelector(
+    (state: RootState) => state.country.searchValue
+  );
   const dispatch = useDispatch();
   const handleBtnOnClick = (uuid: string) => {
     dispatch(removeCountry(uuid));
@@ -203,8 +204,8 @@ const CountryTable = () => {
             코드
           </div>
           <div
-            className={'th id ' + sortDirector(SortBy.callingCodes)}
-            onClick={() => handleSortOnClick(SortBy.callingCodes)}
+            className={'th id ' + sortDirector(SortBy.callingCode)}
+            onClick={() => handleSortOnClick(SortBy.callingCode)}
           >
             ID
           </div>
@@ -229,26 +230,46 @@ const CountryTable = () => {
           <div>로딩 중 ^^@</div>
         ) : (
           <TransitionGroup component={null}>
-            {countries.slice(0, loadCount).map((country, i) => (
-              <CSSTransition
-                timeout={500}
-                classNames="fade"
-                key={`table-row-${country.uuid}`}
-              >
-                <div className="tr">
-                  <div className="td name">{country.name}</div>
-                  <div className="td code">{country.alpha2Code}</div>
-                  <div className="td id">{country.callingCodes}</div>
-                  <div className="td capital">{country.capital}</div>
-                  <div className="td region">{country.region}</div>
-                  <div className="td extra">
-                    <button onClick={() => handleBtnOnClick(country.uuid)}>
-                      삭제
-                    </button>
+            {countries
+              .slice(0, loadCount)
+              .filter((country) => {
+                for (const [key, value] of Object.entries(country)) {
+                  switch (key) {
+                    case 'name':
+                    case 'alpha2Code':
+                    case 'capital':
+                    case 'region':
+                      if ((value as string).includes(searchValue)) return true;
+                      break;
+                    case 'callingCode':
+                      if (value.toString(10).includes(searchValue)) return true;
+                      break;
+                    default:
+                      break;
+                  }
+                }
+                return false;
+              })
+              .map((country, i) => (
+                <CSSTransition
+                  timeout={500}
+                  classNames="fade"
+                  key={`table-row-${country.uuid}`}
+                >
+                  <div className="tr">
+                    <div className="td name">{country.name}</div>
+                    <div className="td code">{country.alpha2Code}</div>
+                    <div className="td id">{country.callingCode}</div>
+                    <div className="td capital">{country.capital}</div>
+                    <div className="td region">{country.region}</div>
+                    <div className="td extra">
+                      <button onClick={() => handleBtnOnClick(country.uuid)}>
+                        삭제
+                      </button>
+                    </div>
                   </div>
-                </div>
-              </CSSTransition>
-            ))}
+                </CSSTransition>
+              ))}
           </TransitionGroup>
         )}
         <p id="sentinel" />

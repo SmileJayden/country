@@ -53,7 +53,7 @@ const FormWrapper = styled.form`
 const schema = yup.object().shape({
   name: yup.string().required('국가 이름을 입력 하시오'),
   alpha2Code: yup.string().required('국가 코드을 입력 하시오'),
-  callingCodes: yup
+  callingCode: yup
     .number()
     .typeError('숫자를 입력 하시오')
     .positive('0보다 큰 수를 입력 하시오')
@@ -89,10 +89,10 @@ const CountryForm = () => {
         <input
           id="form-calling-codes"
           type="text"
-          name="callingCodes"
+          name="callingCode"
           ref={register()}
         />
-        <p>{errors.callingCodes?.message}</p>
+        <p>{errors.callingCode?.message}</p>
       </label>
       <label htmlFor="form-capital">
         <span>국가 수도 이름</span>
