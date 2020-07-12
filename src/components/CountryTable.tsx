@@ -1,8 +1,11 @@
 import React from 'react';
-import { CountryType } from '~/store/country';
-import { useSelector } from 'react-redux';
-import { RootState } from '~/store';
+import { CSSTransition, TransitionGroup } from 'react-transition-group';
 import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
+import uuid from 'uuid';
+import { CountryType, REMOVE_COUNTRY, removeCountry } from '~/store/country';
+
+import { RootState } from '~/store';
 
 const TableWrapper = styled.div`
   &.table {
@@ -62,6 +65,28 @@ const TableWrapper = styled.div`
     .tr:hover {
       background-color: cornsilk;
     }
+
+    .fade-enter {
+      max-height: 0;
+      opacity: 0;
+    }
+
+    .fade-enter-active {
+      max-height: 30px;
+      opacity: 1;
+      transition: all 500ms;
+    }
+
+    .fade-exit {
+      max-height: 30px;
+      opacity: 1;
+    }
+
+    .fade-exit-active {
+      max-height: 0;
+      opacity: 0;
+      transition: all 500ms;
+    }
   }
 `;
 
@@ -69,6 +94,13 @@ const CountryTable = () => {
   const countries: CountryType[] = useSelector(
     (state: RootState) => state.country.countries
   );
+  const loading: boolean = useSelector(
+    (state: RootState) => state.country.loading
+  );
+  const dispatch = useDispatch();
+  const handleBtnOnClick = (uuid: string) => {
+    dispatch(removeCountry(uuid));
+  };
 
   return (
     <TableWrapper className="table">
@@ -82,19 +114,34 @@ const CountryTable = () => {
           <div className="th extra" />
         </div>
       </div>
+
       <div className="tbody">
-        {countries.map((country, i) => (
-          <div className="tr" key={`table-row-${i}`}>
-            <div className="td name">{country.name}</div>
-            <div className="td code">{country.alpha2Code}</div>
-            <div className="td id">{country.callingCodes[0]}</div>
-            <div className="td capital">{country.capital}</div>
-            <div className="td region">{country.region}</div>
-            <div className="td extra">
-              <button>삭제</button>
-            </div>
-          </div>
-        ))}
+        {loading ? (
+          <div>로딩 중 ^^@</div>
+        ) : (
+          <TransitionGroup component={null}>
+            {countries.map((country, i) => (
+              <CSSTransition
+                timeout={500}
+                classNames="fade"
+                key={`table-row-${country.uuid}`}
+              >
+                <div className="tr">
+                  <div className="td name">{country.name}</div>
+                  <div className="td code">{country.alpha2Code}</div>
+                  <div className="td id">{country.callingCodes[0]}</div>
+                  <div className="td capital">{country.capital}</div>
+                  <div className="td region">{country.region}</div>
+                  <div className="td extra">
+                    <button onClick={() => handleBtnOnClick(country.uuid)}>
+                      삭제
+                    </button>
+                  </div>
+                </div>
+              </CSSTransition>
+            ))}
+          </TransitionGroup>
+        )}
       </div>
     </TableWrapper>
   );

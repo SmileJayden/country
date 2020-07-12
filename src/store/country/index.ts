@@ -32,7 +32,7 @@ export interface SortCountries {
 export interface RemoveCountry {
   type: typeof REMOVE_COUNTRY;
   payload: {
-    countryId: number;
+    countryUuid: string;
   };
 }
 
@@ -66,9 +66,9 @@ export const sortCountries = (sortBy: string): SortCountries => ({
   payload: { sortBy },
 });
 
-export const removeCountry = (countryId: number): RemoveCountry => ({
+export const removeCountry = (countryUuid: string): RemoveCountry => ({
   type: REMOVE_COUNTRY,
-  payload: { countryId },
+  payload: { countryUuid },
 });
 
 // state interface
@@ -78,6 +78,7 @@ export interface CountryState {
 }
 
 export interface CountryType {
+  uuid: string;
   name: string;
   alpha2Code: string;
   callingCodes: string[];
@@ -113,8 +114,11 @@ const countryReducer = (
       console.log('SORT_COUNTRIES action is come');
       return state;
     case REMOVE_COUNTRY:
-      console.log('REMOVE_COUNTRY action is come');
-      return state;
+      const targetUuid = action.payload.countryUuid;
+      return {
+        ...state,
+        countries: state.countries.filter((ctr) => ctr.uuid !== targetUuid),
+      };
     default:
       return state;
   }

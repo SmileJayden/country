@@ -2,13 +2,15 @@ import {
   CountryType,
   FAIL_FETCH_COUNTRIES,
   INIT_FETCH_COUNTRIES,
+  REMOVE_COUNTRY,
   SUCCESS_FETCH_COUNTRIES,
   SuccessFetchCountries,
 } from '~/store/country/index';
 import axios, { AxiosResponse } from 'axios';
+import { v4 as uuid } from 'uuid';
 import { ActionsObservable, combineEpics, ofType } from 'redux-observable';
 import { Action } from 'redux';
-import { catchError, switchMap } from 'rxjs/operators';
+import { catchError, map, switchMap } from 'rxjs/operators';
 
 const URL =
   'https://restcountries.eu/rest/v2/all?fields=alpha2Code;capital;name;region;callingCodes';
@@ -18,10 +20,11 @@ const fetchCountriesEpic = (action$: ActionsObservable<Action>) => {
     ofType(INIT_FETCH_COUNTRIES),
     switchMap(
       async (action): Promise<SuccessFetchCountries> => {
-        console.log('mergeMap action', action);
         const res: CountryType[] = await axios
           .get(URL)
-          .then((res: AxiosResponse) => res.data);
+          .then((res: AxiosResponse) =>
+            res.data.map((ctr: CountryType) => ({ ...ctr, uuid: uuid() }))
+          );
         return { type: SUCCESS_FETCH_COUNTRIES, payload: { countries: res } };
       }
     ),

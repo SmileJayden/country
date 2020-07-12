@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {} from 'styled-components/cssprop';
 import styled from 'styled-components';
 import { RootState } from '~/store';
-import { CountryType, INIT_FETCH_COUNTRIES } from '~/store/country';
+import { INIT_FETCH_COUNTRIES, initFetchCountries } from '~/store/country';
 import CountryTable from '~/components/CountryTable';
 import CountryForm from '~/components/CountryForm';
 
@@ -19,7 +19,7 @@ const App = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch({ type: INIT_FETCH_COUNTRIES });
+    dispatch(initFetchCountries());
   }, []);
 
   return (
