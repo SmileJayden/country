@@ -6,7 +6,8 @@
   "author": "SmileJayden <wkdwodud07@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "dev": "webpack-dev-server --host 0.0.0.0"
+    "dev": "webpack-dev-server --host 0.0.0.0",
+    "build": "webpack --mode=production"
   },
   "dependencies": {
     "@hookform/resolvers": "^0.0.6",

@@ -231,7 +231,6 @@ const CountryTable = () => {
         ) : (
           <TransitionGroup component={null}>
             {countries
-              .slice(0, loadCount)
               .filter((country) => {
                 for (const [key, value] of Object.entries(country)) {
                   switch (key) {
@@ -250,6 +249,7 @@ const CountryTable = () => {
                 }
                 return false;
               })
+              .slice(0, loadCount)
               .map((country, i) => (
                 <CSSTransition
                   timeout={500}
