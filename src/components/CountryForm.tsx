@@ -3,6 +3,8 @@ import { useForm } from 'react-hook-form';
 import styled from 'styled-components';
 import { yupResolver } from '@hookform/resolvers';
 import * as yup from 'yup';
+import { addCountry, CountryFormType as FormData } from '~/store/country';
+import { useDispatch } from 'react-redux';
 
 const FormWrapper = styled.form`
   width: 300px;
@@ -43,22 +45,6 @@ const FormWrapper = styled.form`
   }
 `;
 
-interface FormData {
-  name: string;
-  alpha2Code: string;
-  callingCodes: number;
-  capital: string;
-  region: RegionEnum;
-}
-
-enum RegionEnum {
-  Africa = 'Africa',
-  Asia = 'Asia',
-  Americas = 'Americas',
-  Europe = 'Europe',
-  Oceania = 'Oceania',
-}
-
 const schema = yup.object().shape({
   name: yup.string().required('국가 이름을 입력 하시오'),
   alpha2Code: yup.string().required('국가 코드을 입력 하시오'),
@@ -76,8 +62,9 @@ const CountryForm = () => {
   const { register, errors, handleSubmit } = useForm<FormData>({
     resolver: yupResolver(schema),
   });
+  const dispatch = useDispatch();
   const onSubmit = (formData: FormData) => {
-    console.log(formData);
+    dispatch(addCountry(formData));
   };
 
   return (

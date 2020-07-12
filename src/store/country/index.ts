@@ -1,9 +1,28 @@
+import { v4 as uuid } from 'uuid';
+
 // action types
 export const INIT_FETCH_COUNTRIES = 'INIT_FETCH_COUNTRIES';
 export const SUCCESS_FETCH_COUNTRIES = 'SUCCESS_FETCH_COUNTRIES';
 export const FAIL_FETCH_COUNTRIES = 'FAIL_FETCH_COUNTRIES';
 export const SORT_COUNTRIES = 'SORT_COUNTRIES';
+export const ADD_COUNTRY = 'ADD_COUNTRY';
 export const REMOVE_COUNTRY = 'REMOVE_COUNTRY';
+
+export interface CountryFormType {
+  name: string;
+  alpha2Code: string;
+  callingCodes: string;
+  capital: string;
+  region: RegionEnum;
+}
+
+enum RegionEnum {
+  Africa = 'Africa',
+  Asia = 'Asia',
+  Americas = 'Americas',
+  Europe = 'Europe',
+  Oceania = 'Oceania',
+}
 
 export interface InitFetchCountries {
   type: typeof INIT_FETCH_COUNTRIES;
@@ -29,6 +48,13 @@ export interface SortCountries {
   };
 }
 
+export interface AddCountry {
+  type: typeof ADD_COUNTRY;
+  payload: {
+    country: CountryFormType;
+  };
+}
+
 export interface RemoveCountry {
   type: typeof REMOVE_COUNTRY;
   payload: {
@@ -41,6 +67,7 @@ export type CountryActionTypes =
   | SuccessFetchCountries
   | FailFetchCountries
   | SortCountries
+  | AddCountry
   | RemoveCountry;
 
 // action functions
@@ -64,6 +91,11 @@ export const failFetchCountries = (): FailFetchCountries => ({
 export const sortCountries = (sortBy: string): SortCountries => ({
   type: SORT_COUNTRIES,
   payload: { sortBy },
+});
+
+export const addCountry = (countryFormData: CountryFormType): AddCountry => ({
+  type: ADD_COUNTRY,
+  payload: { country: countryFormData },
 });
 
 export const removeCountry = (countryUuid: string): RemoveCountry => ({
@@ -113,6 +145,13 @@ const countryReducer = (
     case SORT_COUNTRIES:
       console.log('SORT_COUNTRIES action is come');
       return state;
+    case 'ADD_COUNTRY':
+      const addedCountry: CountryType = {
+        ...action.payload.country,
+        callingCodes: [action.payload.country.callingCodes],
+        uuid: uuid(),
+      };
+      return { ...state, countries: [addedCountry].concat(state.countries) };
     case REMOVE_COUNTRY:
       const targetUuid = action.payload.countryUuid;
       return {
