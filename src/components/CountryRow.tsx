@@ -1,5 +1,6 @@
 import React from 'react';
 import { CountryType } from '~/store/country';
+import { useDispatch } from 'react-redux';
 
 const CountryRow: React.FC<CountryType> = ({
   name,
@@ -8,7 +9,6 @@ const CountryRow: React.FC<CountryType> = ({
   capital,
   region,
 }) => {
-  // const country = props.country;
   return (
     <tr>
       <td>{name}</td>
@@ -16,6 +16,9 @@ const CountryRow: React.FC<CountryType> = ({
       <td>{callingCodes}</td>
       <td>{capital}</td>
       <td>{region}</td>
+      <td>
+        <button>삭제</button>
+      </td>
     </tr>
   );
 };

@@ -37,6 +37,7 @@ const FormWrapper = styled.form`
   }
 
   button {
+    cursor: pointer;
     margin-top: 20px;
     padding: 20px;
   }
@@ -120,7 +121,7 @@ const CountryForm = () => {
         </select>
         <p>{errors.region?.message}</p>
       </label>
-      <button type="submit">나라 추가 +</button>
+      <button type="submit">국가 추가 +</button>
     </FormWrapper>
   );
 };
