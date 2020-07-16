@@ -11,7 +11,7 @@ import axios, { AxiosResponse } from 'axios';
 import { v4 as uuid } from 'uuid';
 import { ActionsObservable, combineEpics, ofType } from 'redux-observable';
 import { Action } from 'redux';
-import { catchError, debounceTime, flatMap, switchMap } from 'rxjs/operators';
+import { catchError, debounceTime, map, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 interface CountryResponseType {
@@ -60,7 +60,7 @@ const searchCountriesEpic = (action$: ActionsObservable<Action>) => {
   return action$.pipe(
     ofType(UPDATE_INPUT_VALUE),
     debounceTime(500),
-    switchMap(() => of({ type: UPDATE_SEARCH_VALUE }))
+    map((x) => ({ type: UPDATE_SEARCH_VALUE }))
   );
 };
 
