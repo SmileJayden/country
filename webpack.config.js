@@ -61,13 +61,13 @@ module.exports = (env, options) => {
   };
 
   if (options.mode === 'production') {
-    config.plugins = [
-      ...config.plugins,
-      new CleanWebpackPlugin(),
-      new BundleAnalyzerPlugin(),
-    ];
+    config.plugins = [...config.plugins, new CleanWebpackPlugin()];
   } else if (options.mode === 'development') {
     config.devtool = 'eval-source-map';
+  }
+
+  if (process.env.ANALYZE) {
+    config.plugins = [...config.plugins, new BundleAnalyzerPlugin()];
   }
 
   return config;
