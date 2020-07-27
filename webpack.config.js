@@ -1,5 +1,9 @@
 const path = require('path');
 const HTMLplugin = require('html-webpack-plugin');
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer')
+  .BundleAnalyzerPlugin;
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 
 module.exports = (env, options) => {
   const config = {
@@ -42,13 +46,26 @@ module.exports = (env, options) => {
         '~': path.resolve(__dirname, 'src'),
       },
     },
-    devtool: 'eval-source-map',
+    optimization: {
+      minimize: true,
+      minimizer: [new TerserPlugin()],
+    },
     plugins: [
       new HTMLplugin({
         template: './index.html',
       }),
     ],
   };
+
+  if (options.mode === 'production') {
+    config.plugins = [
+      ...config.plugins,
+      new CleanWebpackPlugin(),
+      new BundleAnalyzerPlugin(),
+    ];
+  } else if (options.mode === 'development') {
+    config.devtool = 'eval-source-map';
+  }
 
   return config;
 };
